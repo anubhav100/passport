@@ -55,6 +55,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
+app.get('/', function(req, res, next) {
+  res.sendfile('./html/auth.html');
+});
 
 module.exports = app;
