@@ -58,5 +58,24 @@ app.use(function(err, req, res, next) {
 app.get('/', function(req, res, next) {
   res.sendfile('./html/auth.html');
 });
+var passport = require('passport');
+var GitHubStrategy = require('passport-github').Strategy;
+
+passport.use(new GitHubStrategy({
+  clientID: "ade2a8b9c73976aac7ef",
+  clientSecret: "9b7f833cd44dddbb3d37cd8b5d4a273603ebcdcb",
+  callbackURL: 'http://localhost:3000/auth/github/callback'
+}, function(accessToken, refreshToken, profile, done) {
+  process.nextTick(function() {
+    return done(null, profile);
+  });
+}));
+
+app.get('/auth/github', passport.authenticate('github'));
+
+app.get('/auth/github/callback', passport.authenticate('github', {
+  successRedirect: '/success',
+  failureRedirect:'/error'
+}));
 
 module.exports = app;
